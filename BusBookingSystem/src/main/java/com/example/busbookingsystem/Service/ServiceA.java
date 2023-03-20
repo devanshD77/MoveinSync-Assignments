@@ -52,16 +52,14 @@ public class ServiceA {
     }
 
     public void updateBus(BusInfo busInfo, AdminInfo adminInfo) throws CustException {
-        // verifying admin.
         Optional<AdminInfo> admin = adminRepo.findById(adminInfo.getAdminid());
         if(admin.isEmpty()){
             throw new CustException("Wrong id");
         }
         AdminInfo adm = admin.get();
-        if(!adm.getAdminpassword().equals(adm.getAdminpassword())){
+        if(!adm.getAdminpassword().equals(adminInfo.getAdminpassword())){
             throw new CustException("Wrong password");
         }
-
         busRepo.updateBusByBusNo(busInfo.getBusno(),busInfo.getBusname());
     }
 
@@ -71,7 +69,7 @@ public class ServiceA {
             throw new CustException("Wrong Id/Password");
         }
         AdminInfo adm = admin.get();
-        if(!adm.getAdminpassword().equals(adm.getAdminpassword())){
+        if(!adm.getAdminpassword().equals(adminInfo.getAdminpassword())){
             throw new CustException("Access Denied Wrong id/password");
         }
         busRepo.deleteById(busId);

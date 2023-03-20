@@ -11,56 +11,56 @@ import java.util.List;
 public class Controller {
     @Autowired
     private ServiceA service;
-    @RequestMapping(value = "/addAdmin",method = RequestMethod.POST)
-    public String addAdmin(@RequestBody AdminInfo adminInfo) throws CustException {
+    @PostMapping( "/addAdmin")
+    public String addAdmin(@RequestBody AdminInfo adminInfo) throws CustException{
         service.addAdmin(adminInfo);
         return "Admin Added Successfully";
     }
-    @RequestMapping(value = "/addBus",method = RequestMethod.POST)
+    @PostMapping( "/addBus")
     public String addBus(@RequestBody BusAndAdmin busAndAdmin) throws CustException {
         service.addBus(busAndAdmin.getBusInfo(),busAndAdmin.getAdminInfo());
         return "Bus Added Successfully";
     }
 
-    @RequestMapping(value = "/deleteBus",method = RequestMethod.DELETE)
+    @DeleteMapping ( "/deleteBus")
     public String deleteBus(@RequestBody BusAndAdmin busAndAdmin) throws CustException {
         service.deleteBus(busAndAdmin.getBusInfo().getBusno(),busAndAdmin.getAdminInfo());
         return "Bus deleted Successfully";
     }
-
-    @RequestMapping(value = "/adduser",method = RequestMethod.POST)
+    @PutMapping("/updatebus")
+    public String updatebus(@RequestBody BusAndAdmin busAndAdmin) throws CustException {
+        service.updateBus(busAndAdmin.getBusInfo(),busAndAdmin.getAdminInfo());
+        return "Bus Details Updated Successfully";
+    }
+    @PostMapping( "/adduser")
     public String adduser(@RequestBody UserInfo userInfo) throws CustException {
         service.adduser(userInfo);
         return "User Added successfully";
     }
-    @RequestMapping(value = "/checkbus",method = RequestMethod.GET)
+    @GetMapping( "/checkbus")
     public List<BusInfo> checkbus(@RequestBody BusInfo busInfo) throws CustException {
         List<BusInfo>buses=service.findbuses(busInfo.getSource(),busInfo.getDestination());
-        if(buses.size()==0)
+        if(buses.isEmpty())
         {
             throw new CustException("No buses found");
         }
         return buses;
     }
-    @RequestMapping(value = "/seatsavailaible",method = RequestMethod.GET)
+    @GetMapping( "/seatsavailaible")
     public String seatsavailable(@RequestBody BusInfo busInfo) throws CustException {
        Integer no=0;
        no=service.seats(busInfo.getBusno());
        return "No of available seats are "+no;
 
     }
-    @RequestMapping(value = "/bookseat",method = RequestMethod.POST)
+    @PostMapping( "/bookseat")
     public String bookseat(@RequestBody BookingInfo bookingInfo) throws CustException {
         service.bookseats(bookingInfo);
         return "Seat Booked Successfully";
     }
-    @RequestMapping(value = "/cancelseat",method = RequestMethod.DELETE)
+    @DeleteMapping("/cancelseat")
     public String cancelseat(@RequestBody BookingInfo bookingInfo) throws CustException {
         service.cancel(bookingInfo);
         return "Seat cancelled successfully";
     }
-
-
-
-
 }
